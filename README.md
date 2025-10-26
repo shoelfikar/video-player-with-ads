@@ -15,6 +15,14 @@ A dynamically configurable video player with ad support, complete controls, and 
 - ✅ **Responsive Design** - Adapts to various screen sizes
 - ✅ **Modern UI** - Built with Tailwind CSS
 
+## Screenshots
+
+### Video Player Interface
+![Video Player Main Interface](screenshoot/Screenshot%202025-10-26%20at%2009.22.12.png)
+
+### Video Player with Controls
+![Video Player Controls](screenshoot/Screenshot%202025-10-26%20at%2009.22.37.png)
+
 ## Installation
 
 1. Download or clone this repository
