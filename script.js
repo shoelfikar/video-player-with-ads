@@ -605,10 +605,10 @@ class VideoPlayer {
         adBadge.className = 'absolute top-4 left-4 bg-yellow-500 text-black px-3 py-1 rounded-full text-sm font-bold';
         adBadge.textContent = 'Ad';
 
-        // Ad timer
+        // Ad timer (hidden by default)
         const adTimer = document.createElement('div');
         adTimer.id = 'adTimeRemaining';
-        adTimer.className = 'absolute top-4 right-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm';
+        adTimer.className = 'absolute top-4 right-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm hidden';
         adTimer.innerHTML = '<span id="adTimer">--</span>s';
 
         // Skip button
@@ -805,6 +805,8 @@ class VideoPlayer {
             this.skipCountdown?.classList.remove('hidden');
             this.skipButton?.classList.add('opacity-0', 'pointer-events-none');
             this.skipButton?.classList.remove('opacity-100', 'pointer-events-auto');
+            // Show ad timer when ad starts playing
+            document.getElementById('adTimeRemaining')?.classList.remove('hidden');
         });
 
         // Skip button click handler
@@ -850,6 +852,9 @@ class VideoPlayer {
         // Hide ad elements
         this.adVideo?.classList.add('hidden');
         this.adOverlay?.classList.add('hidden');
+
+        // Hide ad timer
+        document.getElementById('adTimeRemaining')?.classList.add('hidden');
 
         // Show and play main video
         this.mainVideo?.classList.remove('hidden');

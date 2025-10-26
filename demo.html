@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Video Player - Sistem Iklan Dinamis</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .card {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="p-8">
+
+    <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-bold text-white mb-4">Video Player Demo</h1>
+            <p class="text-gray-200 text-xl">Contoh implementasi menggunakan script.js</p>
+        </div>
+
+        <!-- Video Player 1 - Dengan Section Title -->
+        <div id="player-wrapper-1" class="mb-16"></div>
+
+        <!-- Divider -->
+        <div class="my-16 flex items-center">
+            <div class="flex-1 border-t-2 border-white/30"></div>
+            <div class="px-4 text-white font-semibold">Video Lainnya</div>
+            <div class="flex-1 border-t-2 border-white/30"></div>
+        </div>
+
+        <!-- Video Player 2 - Tanpa Section -->
+        <div id="player-wrapper-2" class="mb-16"></div>
+
+        <!-- Info Card -->
+        <div class="card rounded-2xl p-8 text-white shadow-2xl">
+            <h2 class="text-3xl font-bold mb-6">Fitur Lengkap Video Player</h2>
+
+            <div class="grid md:grid-cols-2 gap-6 mb-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3 text-yellow-300">Kontrol Video</h3>
+                    <ul class="space-y-2 text-gray-200">
+                        <li>✓ Play / Pause</li>
+                        <li>✓ Skip Forward / Backward (10/15 detik)</li>
+                        <li>✓ Volume Control & Mute</li>
+                        <li>✓ Fullscreen Mode</li>
+                        <li>✓ Progress Bar dengan Seek</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-3 text-yellow-300">Fitur Lanjutan</h3>
+                    <ul class="space-y-2 text-gray-200">
+                        <li>✓ Sistem Iklan dengan Skip Button</li>
+                        <li>✓ Pengaturan Kecepatan (0.5x - 2x)</li>
+                        <li>✓ Pengaturan Kualitas Video</li>
+                        <li>✓ Auto-hide Controls</li>
+                        <li>✓ Loading Indicators</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Keyboard Shortcuts -->
+            <div class="bg-black/30 rounded-xl p-6">
+                <h3 class="text-xl font-bold mb-4 text-yellow-300">Keyboard Shortcuts</h3>
+                <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                    <div class="flex items-center space-x-2">
+                        <kbd class="bg-white/20 px-3 py-1 rounded font-mono">Space</kbd>
+                        <span class="text-gray-300">Play/Pause</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <kbd class="bg-white/20 px-3 py-1 rounded font-mono">K</kbd>
+                        <span class="text-gray-300">Play/Pause</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <kbd class="bg-white/20 px-3 py-1 rounded font-mono">←</kbd>
+                        <span class="text-gray-300">Skip Backward</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <kbd class="bg-white/20 px-3 py-1 rounded font-mono">→</kbd>
+                        <span class="text-gray-300">Skip Forward</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <kbd class="bg-white/20 px-3 py-1 rounded font-mono">↑</kbd>
+                        <span class="text-gray-300">Volume Up</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <kbd class="bg-white/20 px-3 py-1 rounded font-mono">↓</kbd>
+                        <span class="text-gray-300">Volume Down</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <kbd class="bg-white/20 px-3 py-1 rounded font-mono">F</kbd>
+                        <span class="text-gray-300">Fullscreen</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <kbd class="bg-white/20 px-3 py-1 rounded font-mono">M</kbd>
+                        <span class="text-gray-300">Mute/Unmute</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Code Example -->
+        <div class="card rounded-2xl p-8 text-white shadow-2xl mt-8">
+            <h2 class="text-3xl font-bold mb-6">Cara Menggunakan</h2>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold mb-3 text-yellow-300">1. Include Script</h3>
+                <pre class="bg-black/50 p-4 rounded-lg overflow-x-auto text-sm"><code class="text-green-300">&lt;script src="script.js"&gt;&lt;/script&gt;</code></pre>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold mb-3 text-yellow-300">2. Siapkan Container</h3>
+                <pre class="bg-black/50 p-4 rounded-lg overflow-x-auto text-sm"><code class="text-green-300">&lt;div id="player-wrapper"&gt;&lt;/div&gt;</code></pre>
+            </div>
+
+            <div>
+                <h3 class="text-xl font-semibold mb-3 text-yellow-300">3. Inisialisasi VideoPlayer</h3>
+                <pre class="bg-black/50 p-4 rounded-lg overflow-x-auto text-sm"><code class="text-green-300">const player = new VideoPlayer({
+    wrapperId: 'player-wrapper',
+    section: {
+        title: 'Judul Section',
+        description: 'Deskripsi section'
+    },
+    mainVideo: {
+        url: 'https://example.com/video.mp4',
+        title: 'Judul Video',
+        description: 'Deskripsi video',
+        type: 'video/mp4'
+    },
+    adVideo: {
+        url: 'https://example.com/ad.mp4',
+        skipAfter: 5,
+        type: 'video/mp4'
+    },
+    thumbnailUrl: 'https://example.com/thumbnail.mp4',
+    skipBackwardSeconds: 10,
+    skipForwardSeconds: 10,
+    infoText: 'Teks informasi kustom'
+});</code></pre>
+            </div>
+        </div>
+
+        <!-- Public Methods -->
+        <div class="card rounded-2xl p-8 text-white shadow-2xl mt-8">
+            <h2 class="text-3xl font-bold mb-6">Public Methods</h2>
+
+            <div class="space-y-4">
+                <div class="bg-black/30 rounded-lg p-4">
+                    <code class="text-yellow-300 text-lg">player.play()</code>
+                    <p class="text-gray-300 mt-2">Memutar video utama</p>
+                </div>
+
+                <div class="bg-black/30 rounded-lg p-4">
+                    <code class="text-yellow-300 text-lg">player.pause()</code>
+                    <p class="text-gray-300 mt-2">Menghentikan video sementara</p>
+                </div>
+
+                <div class="bg-black/30 rounded-lg p-4">
+                    <code class="text-yellow-300 text-lg">player.setVolume(volume)</code>
+                    <p class="text-gray-300 mt-2">Mengatur volume (0-1). Contoh: <code class="text-green-300">player.setVolume(0.5)</code></p>
+                </div>
+
+                <div class="bg-black/30 rounded-lg p-4">
+                    <code class="text-yellow-300 text-lg">player.seekTo(seconds)</code>
+                    <p class="text-gray-300 mt-2">Loncat ke waktu tertentu (dalam detik). Contoh: <code class="text-green-300">player.seekTo(60)</code></p>
+                </div>
+
+                <div class="bg-black/30 rounded-lg p-4">
+                    <code class="text-yellow-300 text-lg">player.getCurrentTime()</code>
+                    <p class="text-gray-300 mt-2">Mendapatkan waktu playback saat ini</p>
+                </div>
+
+                <div class="bg-black/30 rounded-lg p-4">
+                    <code class="text-yellow-300 text-lg">player.getDuration()</code>
+                    <p class="text-gray-300 mt-2">Mendapatkan durasi total video</p>
+                </div>
+
+                <div class="bg-black/30 rounded-lg p-4">
+                    <code class="text-yellow-300 text-lg">player.destroy()</code>
+                    <p class="text-gray-300 mt-2">Membersihkan dan menghancurkan instance player</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-12 text-white/70">
+            <p>Video Player dengan Sistem Iklan Dinamis</p>
+            <p class="text-sm mt-2">Dibuat menggunakan Vanilla JavaScript & Tailwind CSS</p>
+        </div>
+    </div>
+
+    <!-- Load Video Player Script -->
+    <script src="script.js"></script>
+
+    <script>
+        // ============================================
+        // Video Player 1 - Dengan Section & Info Text
+        // ============================================
+        const player1 = new VideoPlayer({
+            wrapperId: 'player-wrapper-1',
+
+            // Judul dan deskripsi section (opsional)
+            section: {
+                title: 'Big Buck Bunny',
+                description: 'Film animasi pendek tentang kelinci besar yang baik hati'
+            },
+
+            // Konfigurasi video utama
+            mainVideo: {
+                url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+                title: 'Big Buck Bunny - Short Film',
+                description: 'Big Buck Bunny adalah film animasi pendek yang dibuat oleh Blender Institute sebagai proyek open source. Film ini menceritakan tentang kelinci besar yang berusaha melindungi diri dari tiga hewan kecil yang nakal.',
+                type: 'video/mp4'
+            },
+
+            // Konfigurasi iklan
+            adVideo: {
+                url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+                skipAfter: 5, // Tombol skip muncul setelah 5 detik
+                type: 'video/mp4'
+            },
+
+            // URL untuk thumbnail (akan ditampilkan sebelum play)
+            thumbnailUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+
+            // Durasi skip (dalam detik)
+            skipBackwardSeconds: 10,
+            skipForwardSeconds: 10,
+
+            // Delay sebelum kontrol disembunyikan otomatis (dalam milidetik)
+            autoHideControlsDelay: 3000,
+
+            // Teks informasi di bawah player
+            infoText: 'Video akan memutar iklan terlebih dahulu. Klik tombol Skip setelah 5 detik atau tunggu hingga iklan selesai.'
+        });
+
+        // ============================================
+        // Video Player 2 - Konfigurasi Berbeda
+        // ============================================
+        const player2 = new VideoPlayer({
+            wrapperId: 'player-wrapper-2',
+
+            // Section dengan judul dan deskripsi
+            section: {
+                title: 'Elephants Dream',
+                description: 'Proyek open movie pertama dari Blender Foundation'
+            },
+
+            mainVideo: {
+                url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+                title: 'Elephants Dream',
+                description: 'Elephants Dream adalah film pendek animasi 3D yang diproduksi oleh Blender Foundation. Ini adalah proyek "Orange" pertama yang menampilkan dua karakter dalam dunia mekanik surealis.',
+                type: 'video/mp4'
+            },
+
+            adVideo: {
+                url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+                skipAfter: 3, // Skip button muncul lebih cepat (3 detik)
+                type: 'video/mp4'
+            },
+
+            thumbnailUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+
+            // Skip dengan durasi yang berbeda
+            skipBackwardSeconds: 15,
+            skipForwardSeconds: 15,
+
+            infoText: 'Iklan akan diputar terlebih dahulu. Anda dapat skip setelah 3 detik.'
+        });
+
+        // ============================================
+        // Contoh Menggunakan Public Methods
+        // ============================================
+
+        // Log informasi player
+        console.log('Player 1 initialized:', player1);
+        console.log('Player 2 initialized:', player2);
+
+        // Uncomment untuk test public methods:
+
+        // Memutar video setelah 2 detik
+        // setTimeout(() => {
+        //     player1.play();
+        // }, 2000);
+
+        // Mengatur volume ke 50%
+        // setTimeout(() => {
+        //     player1.setVolume(0.5);
+        // }, 3000);
+
+        // Loncat ke menit ke-1
+        // setTimeout(() => {
+        //     player1.seekTo(60);
+        // }, 5000);
+
+        // Mendapatkan waktu playback saat ini
+        // setInterval(() => {
+        //     console.log('Current time:', player1.getCurrentTime());
+        //     console.log('Duration:', player1.getDuration());
+        // }, 1000);
+    </script>
+
+</body>
+</html>
