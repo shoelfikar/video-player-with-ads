@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player - Usage Examples</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 min-h-screen p-8">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-4xl font-bold text-white mb-8 text-center">VideoPlayer - Dynamic Configuration Examples</h1>
+
+        <!-- Example 1: Default Configuration -->
+        <div class="mb-16">
+            <h2 class="text-2xl font-semibold text-white mb-4">Example 1: Default Configuration</h2>
+            <div class="w-full max-w-4xl mx-auto">
+                <div id="player-1" class="relative bg-black rounded-lg overflow-hidden shadow-2xl">
+                    <!-- Main Video Thumbnail -->
+                    <video id="thumbnailVideo" class="w-full aspect-video" playsinline>
+                        <source src="" type="video/mp4">
+                    </video>
+
+                    <!-- Ad Video Player -->
+                    <video id="adVideo" class="w-full aspect-video hidden" playsinline>
+                        <source src="" type="video/mp4">
+                    </video>
+
+                    <!-- Main Video Player -->
+                    <video id="mainVideo" class="w-full aspect-video hidden" playsinline>
+                        <source src="" type="video/mp4">
+                    </video>
+
+                    <!-- Main Video Controls -->
+                    <div id="mainVideoControls" class="hidden">
+                        <!-- Video Description -->
+                        <div id="videoInfo" class="absolute top-4 left-4 max-w-sm bg-gradient-to-r from-black/80 to-transparent p-3 pr-6 rounded-lg opacity-0 transition-opacity duration-300">
+                            <h2 id="videoTitle" class="text-white text-base font-bold mb-1">Video Title</h2>
+                            <p id="videoDescription" class="text-gray-300 text-xs leading-relaxed">Video description</p>
+                        </div>
+
+                        <!-- Settings Button -->
+                        <div class="absolute top-4 right-4 opacity-0 transition-opacity duration-300" id="settingsContainer">
+                            <button id="settingsBtn" class="bg-black/60 hover:bg-black/80 text-white rounded-full p-2 transition-all">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+                                </svg>
+                            </button>
+                            <div id="settingsMenu" class="hidden absolute top-12 right-0 bg-black/95 text-white rounded-lg shadow-2xl overflow-hidden w-56">
+                                <div class="border-b border-gray-700">
+                                    <button id="speedMenuBtn" class="w-full px-4 py-3 hover:bg-white/10 transition-colors flex items-center justify-between">
+                                        <span class="font-semibold">Speed</span>
+                                        <div class="flex items-center">
+                                            <span id="currentSpeed" class="text-sm text-gray-300 mr-2">1x</span>
+                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                                        </div>
+                                    </button>
+                                    <div id="speedSubmenu" class="hidden bg-black/98">
+                                        <button class="speed-option w-full px-6 py-2 hover:bg-white/10 transition-colors text-left text-sm" data-speed="0.5">0.5x</button>
+                                        <button class="speed-option w-full px-6 py-2 hover:bg-white/10 transition-colors text-left text-sm" data-speed="0.75">0.75x</button>
+                                        <button class="speed-option w-full px-6 py-2 hover:bg-white/10 transition-colors text-left text-sm bg-white/20" data-speed="1">Normal (1x)</button>
+                                        <button class="speed-option w-full px-6 py-2 hover:bg-white/10 transition-colors text-left text-sm" data-speed="1.25">1.25x</button>
+                                        <button class="speed-option w-full px-6 py-2 hover:bg-white/10 transition-colors text-left text-sm" data-speed="1.5">1.5x</button>
+                                        <button class="speed-option w-full px-6 py-2 hover:bg-white/10 transition-colors text-left text-sm" data-speed="2">2x</button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button id="qualityMenuBtn" class="w-full px-4 py-3 hover:bg-white/10 transition-colors flex items-center justify-between">
+                                        <span class="font-semibold">Quality</span>
+                                        <div class="flex items-center">
+                                            <span id="currentQuality" class="text-sm text-gray-300 mr-2">Auto</span>
+                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                                        </div>
+                                    </button>
+                                    <div id="qualitySubmenu" class="hidden bg-black/98">
+                                        <button class="quality-option w-full px-6 py-2 hover:bg-white/10 transition-colors text-left text-sm bg-white/20" data-quality="auto">Auto</button>
+                                        <button class="quality-option w-full px-6 py-2 hover:bg-white/10 transition-colors text-left text-sm" data-quality="1080p">1080p</button>
+                                        <button class="quality-option w-full px-6 py-2 hover:bg-white/10 transition-colors text-left text-sm" data-quality="720p">720p</button>
+                                        <button class="quality-option w-full px-6 py-2 hover:bg-white/10 transition-colors text-left text-sm" data-quality="480p">480p</button>
+                                        <button class="quality-option w-full px-6 py-2 hover:bg-white/10 transition-colors text-left text-sm" data-quality="360p">360p</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Loading Spinner -->
+                        <div id="loadingSpinner" class="absolute inset-0 flex items-center justify-center pointer-events-none hidden">
+                            <svg class="animate-spin h-10 w-10 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </div>
+
+                        <!-- Center Controls -->
+                        <div id="centerPlayPause" class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <div class="flex items-center space-x-4">
+                                <button id="skipBackwardBtn" class="bg-black/60 hover:bg-black/80 text-white rounded-full p-3 transform hover:scale-110 transition-all shadow-2xl pointer-events-auto opacity-0">
+                                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M11.99 5V1l-5 5 5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6h-2c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" opacity="0.4"/>
+                                        <text x="9" y="16" font-size="8" fill="currentColor" font-weight="bold" text-anchor="middle">10</text>
+                                    </svg>
+                                </button>
+                                <button id="centerPlayButton" class="bg-black/60 hover:bg-black/80 text-white rounded-full p-4 transform hover:scale-110 transition-all shadow-2xl pointer-events-auto opacity-0">
+                                    <svg id="centerPlayIcon" class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                    <svg id="centerPauseIcon" class="w-10 h-10 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/></svg>
+                                </button>
+                                <button id="skipForwardBtn" class="bg-black/60 hover:bg-black/80 text-white rounded-full p-3 transform hover:scale-110 transition-all shadow-2xl pointer-events-auto opacity-0">
+                                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z" opacity="0.4"/>
+                                        <text x="15" y="16" font-size="8" fill="currentColor" font-weight="bold" text-anchor="middle">10</text>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Controls -->
+                        <div id="bottomControls" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-4 opacity-0 transition-opacity duration-300">
+                            <div class="mb-3">
+                                <div class="relative w-full h-1 bg-gray-600 rounded-full cursor-pointer group" id="progressBarContainer">
+                                    <div id="progressBar" class="absolute h-full bg-red-600 rounded-full" style="width: 0%"></div>
+                                    <div id="progressHandle" class="absolute w-3 h-3 bg-white rounded-full -top-1 -ml-1.5 opacity-0 group-hover:opacity-100 transition-opacity" style="left: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="text-white text-sm font-medium">
+                                        <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <div class="flex items-center space-x-2">
+                                        <button id="volumeBtn" class="text-white hover:text-red-500 transition-colors">
+                                            <svg id="volumeIcon" class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+                                            <svg id="muteIcon" class="w-7 h-7 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+                                        </button>
+                                        <input type="range" id="volumeSlider" min="0" max="100" value="100" class="w-20 h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer" style="accent-color: #ef4444;">
+                                    </div>
+                                    <button id="fullscreenBtn" class="text-white hover:text-red-500 transition-colors">
+                                        <svg id="fullscreenIcon" class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+                                        <svg id="exitFullscreenIcon" class="w-7 h-7 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ad Overlay -->
+                    <div id="adOverlay" class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/50 pointer-events-none">
+                        <div id="adLoadingSpinner" class="absolute inset-0 flex items-center justify-center pointer-events-none hidden">
+                            <svg class="animate-spin h-10 w-10 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </div>
+                        <div class="absolute top-4 left-4 bg-yellow-500 text-black px-3 py-1 rounded-full text-sm font-bold">Ad</div>
+                        <div id="adTimeRemaining" class="absolute top-4 right-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm"><span id="adTimer">--</span>s</div>
+                        <button id="skipButton" class="absolute bottom-8 right-8 bg-white text-black px-6 py-3 rounded-lg font-bold hover:bg-gray-200 transition-all transform hover:scale-105 opacity-0 pointer-events-none">Skip Ad →</button>
+                        <div id="skipCountdown" class="absolute bottom-8 right-8 bg-black/70 text-white px-6 py-3 rounded-lg font-bold">Skip in <span id="skipTimer">5</span>s</div>
+                    </div>
+
+                    <!-- Play Button Overlay -->
+                    <div id="playOverlay" class="absolute inset-0 flex items-center justify-center bg-black/40">
+                        <button id="playButton" class="bg-red-600 hover:bg-red-700 text-white rounded-full p-4 transform hover:scale-110 transition-all shadow-2xl">
+                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-6 text-center text-gray-400 text-sm">
+                    <p id="infoText">Video akan memutar iklan terlebih dahulu. Klik tombol Skip setelah 5 detik atau tunggu hingga iklan selesai.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Code Example -->
+        <div class="bg-gray-800 rounded-lg p-6 mb-8">
+            <h3 class="text-xl font-semibold text-white mb-4">Code:</h3>
+            <pre class="bg-gray-900 p-4 rounded text-green-400 text-sm overflow-x-auto"><code>const player = new VideoPlayer({
+    containerId: 'player-1',
+    mainVideo: {
+        url: 'https://example.com/main-video.mp4',
+        title: 'My Amazing Video',
+        description: 'This is a great video about something interesting.',
+        type: 'video/mp4'
+    },
+    adVideo: {
+        url: 'https://example.com/ad-video.mp4',
+        skipAfter: 5,
+        type: 'video/mp4'
+    },
+    thumbnailUrl: 'https://example.com/thumbnail.mp4',
+    skipBackwardSeconds: 10,
+    skipForwardSeconds: 10,
+    autoHideControlsDelay: 3000,
+    infoText: 'Custom info text here'
+});</code></pre>
+        </div>
+
+        <!-- Available Configuration Options -->
+        <div class="bg-gray-800 rounded-lg p-6">
+            <h3 class="text-2xl font-semibold text-white mb-4">Available Configuration Options:</h3>
+            <div class="text-gray-300 space-y-3">
+                <p><code class="bg-gray-900 px-2 py-1 rounded text-green-400">containerId</code> (required): ID of the container element</p>
+                <p><code class="bg-gray-900 px-2 py-1 rounded text-green-400">mainVideo.url</code>: URL of the main video</p>
+                <p><code class="bg-gray-900 px-2 py-1 rounded text-green-400">mainVideo.title</code>: Title of the video</p>
+                <p><code class="bg-gray-900 px-2 py-1 rounded text-green-400">mainVideo.description</code>: Description of the video</p>
+                <p><code class="bg-gray-900 px-2 py-1 rounded text-green-400">mainVideo.type</code>: Video MIME type (default: 'video/mp4')</p>
+                <p><code class="bg-gray-900 px-2 py-1 rounded text-green-400">adVideo.url</code>: URL of the ad video</p>
+                <p><code class="bg-gray-900 px-2 py-1 rounded text-green-400">adVideo.skipAfter</code>: Seconds before skip button appears (default: 5)</p>
+                <p><code class="bg-gray-900 px-2 py-1 rounded text-green-400">adVideo.type</code>: Ad video MIME type (default: 'video/mp4')</p>
+                <p><code class="bg-gray-900 px-2 py-1 rounded text-green-400">thumbnailUrl</code>: URL for thumbnail video</p>
+                <p><code class="bg-gray-900 px-2 py-1 rounded text-green-400">skipBackwardSeconds</code>: Seconds to skip backward (default: 10)</p>
+                <p><code class="bg-gray-900 px-2 py-1 rounded text-green-400">skipForwardSeconds</code>: Seconds to skip forward (default: 10)</p>
+                <p><code class="bg-gray-900 px-2 py-1 rounded text-green-400">autoHideControlsDelay</code>: Milliseconds before hiding controls (default: 3000)</p>
+                <p><code class="bg-gray-900 px-2 py-1 rounded text-green-400">infoText</code>: Custom info text below player</p>
+            </div>
+
+            <h3 class="text-2xl font-semibold text-white mb-4 mt-8">Available Methods:</h3>
+            <div class="text-gray-300 space-y-3">
+                <p><code class="bg-gray-900 px-2 py-1 rounded text-green-400">player.play()</code>: Play the video</p>
+                <p><code class="bg-gray-900 px-2 py-1 rounded text-green-400">player.pause()</code>: Pause the video</p>
+                <p><code class="bg-gray-900 px-2 py-1 rounded text-green-400">player.setVolume(volume)</code>: Set volume (0-1)</p>
+                <p><code class="bg-gray-900 px-2 py-1 rounded text-green-400">player.seekTo(seconds)</code>: Seek to specific time</p>
+                <p><code class="bg-gray-900 px-2 py-1 rounded text-green-400">player.getCurrentTime()</code>: Get current playback time</p>
+                <p><code class="bg-gray-900 px-2 py-1 rounded text-green-400">player.getDuration()</code>: Get video duration</p>
+                <p><code class="bg-gray-900 px-2 py-1 rounded text-green-400">player.destroy()</code>: Cleanup and destroy player instance</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Initialize Player 1 with custom configuration
+        const player1 = new VideoPlayer({
+            containerId: 'player-1',
+            mainVideo: {
+                url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+                title: 'Big Buck Bunny',
+                description: 'A large and lovable rabbit deals with three tiny bullies, led by a flying squirrel, who are determined to squelch his happiness.',
+                type: 'video/mp4'
+            },
+            adVideo: {
+                url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+                skipAfter: 3,
+                type: 'video/mp4'
+            },
+            thumbnailUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+            skipBackwardSeconds: 15,
+            skipForwardSeconds: 15,
+            infoText: 'Ad will play first. You can skip after 3 seconds.'
+        });
+    </script>
+</body>
+</html>

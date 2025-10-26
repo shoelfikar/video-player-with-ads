@@ -7,8 +7,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-900 min-h-screen flex items-center justify-center p-4">
-    <div class="w-full max-w-4xl">
-        <div class="relative bg-black rounded-lg overflow-hidden shadow-2xl">
+    <div class="w-full max-w-4xl" id="video-player-wrapper">
+        <!-- Video player will be created dynamically here -->
+    </div>
+
+    <div class="w-full max-w-4xl hidden">
+        <div id="video-player-container" class="relative bg-black rounded-lg overflow-hidden shadow-2xl">
             <!-- Main Video Thumbnail (Visible initially) -->
             <video
                 id="thumbnailVideo"
@@ -252,518 +256,57 @@
             </div>
         </div>
 
-        <!-- Info Text -->
-        <div class="mt-6 text-center text-gray-400 text-sm">
-            <p>Video akan memutar iklan terlebih dahulu. Klik tombol Skip setelah 5 detik atau tunggu hingga iklan selesai.</p>
-        </div>
     </div>
 
+    <script src="script.js"></script>
     <script>
-        // Thumbnail Elements
-        const thumbnailVideo = document.getElementById('thumbnailVideo');
-
-        // Ad Elements
-        const adVideo = document.getElementById('adVideo');
-        const adOverlay = document.getElementById('adOverlay');
-        const skipButton = document.getElementById('skipButton');
-        const skipCountdown = document.getElementById('skipCountdown');
-        const skipTimer = document.getElementById('skipTimer');
-        const adTimer = document.getElementById('adTimer');
-        const playOverlay = document.getElementById('playOverlay');
-        const playButton = document.getElementById('playButton');
-
-        // Main Video Elements
-        const mainVideo = document.getElementById('mainVideo');
-        const mainVideoControls = document.getElementById('mainVideoControls');
-        const videoInfo = document.getElementById('videoInfo');
-        const centerPlayButton = document.getElementById('centerPlayButton');
-        const centerPlayIcon = document.getElementById('centerPlayIcon');
-        const centerPauseIcon = document.getElementById('centerPauseIcon');
-        const skipBackwardBtn = document.getElementById('skipBackwardBtn');
-        const skipForwardBtn = document.getElementById('skipForwardBtn');
-        const bottomControls = document.getElementById('bottomControls');
-        const progressBarContainer = document.getElementById('progressBarContainer');
-        const progressBar = document.getElementById('progressBar');
-        const progressHandle = document.getElementById('progressHandle');
-        const currentTimeEl = document.getElementById('currentTime');
-        const durationEl = document.getElementById('duration');
-        const volumeBtn = document.getElementById('volumeBtn');
-        const volumeIcon = document.getElementById('volumeIcon');
-        const muteIcon = document.getElementById('muteIcon');
-        const volumeSlider = document.getElementById('volumeSlider');
-        const fullscreenBtn = document.getElementById('fullscreenBtn');
-        const fullscreenIcon = document.getElementById('fullscreenIcon');
-        const exitFullscreenIcon = document.getElementById('exitFullscreenIcon');
-        const settingsBtn = document.getElementById('settingsBtn');
-        const settingsMenu = document.getElementById('settingsMenu');
-        const settingsContainer = document.getElementById('settingsContainer');
-        const speedMenuBtn = document.getElementById('speedMenuBtn');
-        const speedSubmenu = document.getElementById('speedSubmenu');
-        const qualityMenuBtn = document.getElementById('qualityMenuBtn');
-        const qualitySubmenu = document.getElementById('qualitySubmenu');
-        const currentSpeed = document.getElementById('currentSpeed');
-        const currentQuality = document.getElementById('currentQuality');
-        const speedOptions = document.querySelectorAll('.speed-option');
-        const qualityOptions = document.querySelectorAll('.quality-option');
-        const loadingSpinner = document.getElementById('loadingSpinner');
-        const adLoadingSpinner = document.getElementById('adLoadingSpinner');
-
-        let adDuration = 0;
-        let hideControlsTimeout;
-        let isUserInteracting = false;
-        let isSettingsOpen = false;
-
-        // ============ AD VIDEO FUNCTIONS ============
-
-        // Play button click handler
-        playButton.addEventListener('click', () => {
-            // Hide thumbnail and show ad video
-            thumbnailVideo.classList.add('hidden');
-            adVideo.classList.remove('hidden');
-            adVideo.play();
-            playOverlay.classList.add('hidden');
+        // Initialize the video player with configuration
+        const player = new VideoPlayer({
+            wrapperId: 'video-player-wrapper',
+            mainVideo: {
+                url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+                title: 'Big Buck Bunny',
+                description: 'A large and lovable rabbit deals with three tiny bullies, led by a flying squirrel, who are determined to squelch his happiness.',
+                type: 'video/mp4'
+            },
+            adVideo: {
+                url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+                skipAfter: 5,
+                type: 'video/mp4'
+            },
+            thumbnailUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+            skipBackwardSeconds: 10,
+            skipForwardSeconds: 10,
+            autoHideControlsDelay: 3000,
+            section: {
+                title: 'Featured Video',
+                description: 'Watch this amazing video with ad support'
+            },
+            infoText: 'Video akan memutar iklan terlebih dahulu. Klik tombol Skip setelah 5 detik atau tunggu hingga iklan selesai.'
         });
 
-        // When ad video metadata is loaded
-        adVideo.addEventListener('loadedmetadata', () => {
-            adDuration = Math.floor(adVideo.duration);
-        });
-
-        // Update ad timer and skip countdown
-        adVideo.addEventListener('timeupdate', () => {
-            const currentTime = Math.floor(adVideo.currentTime);
-            const remainingTime = Math.floor(adVideo.duration - adVideo.currentTime);
-
-            // Update ad time remaining
-            adTimer.textContent = remainingTime;
-
-            // Show skip button after 5 seconds
-            if (currentTime >= 5) {
-                skipCountdown.classList.add('hidden');
-                skipButton.classList.remove('opacity-0', 'pointer-events-none');
-                skipButton.classList.add('opacity-100', 'pointer-events-auto');
-            } else {
-                // Update countdown
-                skipTimer.textContent = 5 - currentTime;
-            }
-        });
-
-        // When ad starts playing
-        adVideo.addEventListener('play', () => {
-            skipCountdownValue = 5;
-            skipCountdown.classList.remove('hidden');
-            skipButton.classList.add('opacity-0', 'pointer-events-none');
-            skipButton.classList.remove('opacity-100', 'pointer-events-auto');
-        });
-
-        // Skip button click handler
-        skipButton.addEventListener('click', () => {
-            skipToMainVideo();
-        });
-
-        // When ad ends, automatically play main video
-        adVideo.addEventListener('ended', () => {
-            skipToMainVideo();
-        });
-
-        // Ad video loading events
-        adVideo.addEventListener('waiting', () => {
-            adLoadingSpinner.classList.remove('hidden');
-        });
-
-        adVideo.addEventListener('canplay', () => {
-            adLoadingSpinner.classList.add('hidden');
-        });
-
-        adVideo.addEventListener('playing', () => {
-            adLoadingSpinner.classList.add('hidden');
-        });
-
-        adVideo.addEventListener('seeking', () => {
-            adLoadingSpinner.classList.remove('hidden');
-        });
-
-        adVideo.addEventListener('seeked', () => {
-            adLoadingSpinner.classList.add('hidden');
-        });
-
-        // Function to switch to main video
-        function skipToMainVideo() {
-            // Stop and reset ad video
-            adVideo.pause();
-            adVideo.currentTime = 0;
-
-            // Hide ad elements
-            adVideo.classList.add('hidden');
-            adOverlay.classList.add('hidden');
-
-            // Show and play main video
-            mainVideo.classList.remove('hidden');
-            mainVideoControls.classList.remove('hidden');
-            mainVideo.play();
-        }
-
-        // ============ MAIN VIDEO CONTROLS ============
-
-        // Format time helper
-        function formatTime(seconds) {
-            const mins = Math.floor(seconds / 60);
-            const secs = Math.floor(seconds % 60);
-            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-        }
-
-        // Toggle play/pause
-        function togglePlayPause() {
-            if (mainVideo.paused) {
-                mainVideo.play();
-            } else {
-                mainVideo.pause();
-            }
-        }
-
-        // Update play/pause icons
-        function updatePlayPauseIcons(isPlaying) {
-            if (isPlaying) {
-                centerPlayIcon.classList.add('hidden');
-                centerPauseIcon.classList.remove('hidden');
-            } else {
-                centerPlayIcon.classList.remove('hidden');
-                centerPauseIcon.classList.add('hidden');
-            }
-        }
-
-        // Show/hide controls
-        function showControls() {
-            bottomControls.style.opacity = '1';
-            centerPlayButton.style.opacity = '1';
-            skipBackwardBtn.style.opacity = '1';
-            skipForwardBtn.style.opacity = '1';
-            videoInfo.style.opacity = '1';
-            settingsContainer.style.opacity = '1';
-            clearTimeout(hideControlsTimeout);
-
-            if (!mainVideo.paused && !isUserInteracting && !isSettingsOpen) {
-                hideControlsTimeout = setTimeout(() => {
-                    bottomControls.style.opacity = '0';
-                    centerPlayButton.style.opacity = '0';
-                    skipBackwardBtn.style.opacity = '0';
-                    skipForwardBtn.style.opacity = '0';
-                    videoInfo.style.opacity = '0';
-                    settingsContainer.style.opacity = '0';
-                }, 3000);
-            }
-        }
-
-        // Center play/pause button
-        centerPlayButton.addEventListener('click', (e) => {
-            e.stopPropagation();
-            togglePlayPause();
-        });
-
-        // Skip backward 10 seconds
-        skipBackwardBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            mainVideo.currentTime = Math.max(0, mainVideo.currentTime - 10);
-            showControls();
-        });
-
-        // Skip forward 10 seconds
-        skipForwardBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            mainVideo.currentTime = Math.min(mainVideo.duration, mainVideo.currentTime + 10);
-            showControls();
-        });
-
-        // Click anywhere on video to play/pause
-        mainVideo.addEventListener('click', togglePlayPause);
-
-        // Update UI when playing
-        mainVideo.addEventListener('play', () => {
-            updatePlayPauseIcons(true);
-            showControls();
-        });
-
-        // Update UI when paused
-        mainVideo.addEventListener('pause', () => {
-            updatePlayPauseIcons(false);
-            clearTimeout(hideControlsTimeout);
-            bottomControls.style.opacity = '1';
-            centerPlayButton.style.opacity = '1';
-            skipBackwardBtn.style.opacity = '1';
-            skipForwardBtn.style.opacity = '1';
-            videoInfo.style.opacity = '1';
-            settingsContainer.style.opacity = '1';
-        });
-
-        // Update progress bar and time
-        mainVideo.addEventListener('timeupdate', () => {
-            const percent = (mainVideo.currentTime / mainVideo.duration) * 100;
-            progressBar.style.width = percent + '%';
-            progressHandle.style.left = percent + '%';
-            currentTimeEl.textContent = formatTime(mainVideo.currentTime);
-        });
-
-        // Update duration when metadata loads
-        mainVideo.addEventListener('loadedmetadata', () => {
-            durationEl.textContent = formatTime(mainVideo.duration);
-        });
-
-        // Show loading spinner when video is buffering
-        mainVideo.addEventListener('waiting', () => {
-            loadingSpinner.classList.remove('hidden');
-        });
-
-        // Hide loading spinner when video can play
-        mainVideo.addEventListener('canplay', () => {
-            loadingSpinner.classList.add('hidden');
-        });
-
-        // Also hide loading spinner when video is playing
-        mainVideo.addEventListener('playing', () => {
-            loadingSpinner.classList.add('hidden');
-        });
-
-        // Show loading when seeking (stalled)
-        mainVideo.addEventListener('seeking', () => {
-            loadingSpinner.classList.remove('hidden');
-        });
-
-        // Hide loading when seek is complete
-        mainVideo.addEventListener('seeked', () => {
-            loadingSpinner.classList.add('hidden');
-        });
-
-        // Progress bar click to seek
-        progressBarContainer.addEventListener('click', (e) => {
-            const rect = progressBarContainer.getBoundingClientRect();
-            const percent = (e.clientX - rect.left) / rect.width;
-            mainVideo.currentTime = percent * mainVideo.duration;
-        });
-
-        // Volume control
-        volumeBtn.addEventListener('click', () => {
-            if (mainVideo.volume > 0) {
-                mainVideo.volume = 0;
-                volumeSlider.value = 0;
-                volumeIcon.classList.add('hidden');
-                muteIcon.classList.remove('hidden');
-            } else {
-                mainVideo.volume = 1;
-                volumeSlider.value = 100;
-                volumeIcon.classList.remove('hidden');
-                muteIcon.classList.add('hidden');
-            }
-        });
-
-        volumeSlider.addEventListener('input', (e) => {
-            const volume = e.target.value / 100;
-            mainVideo.volume = volume;
-
-            if (volume === 0) {
-                volumeIcon.classList.add('hidden');
-                muteIcon.classList.remove('hidden');
-            } else {
-                volumeIcon.classList.remove('hidden');
-                muteIcon.classList.add('hidden');
-            }
-        });
-
-        // Fullscreen control
-        fullscreenBtn.addEventListener('click', () => {
-            if (!document.fullscreenElement) {
-                mainVideo.parentElement.requestFullscreen();
-            } else {
-                document.exitFullscreen();
-            }
-        });
-
-        // Update fullscreen icon
-        document.addEventListener('fullscreenchange', () => {
-            if (document.fullscreenElement) {
-                fullscreenIcon.classList.add('hidden');
-                exitFullscreenIcon.classList.remove('hidden');
-            } else {
-                fullscreenIcon.classList.remove('hidden');
-                exitFullscreenIcon.classList.add('hidden');
-            }
-        });
-
-        // Mouse movement on video container
-        const videoContainer = mainVideo.parentElement;
-        videoContainer.addEventListener('mousemove', () => {
-            if (!mainVideoControls.classList.contains('hidden')) {
-                showControls();
-            }
-        });
-
-        videoContainer.addEventListener('mouseenter', () => {
-            if (!mainVideoControls.classList.contains('hidden')) {
-                showControls();
-            }
-        });
-
-        videoContainer.addEventListener('mouseleave', () => {
-            if (!mainVideo.paused && !mainVideoControls.classList.contains('hidden') && !isSettingsOpen) {
-                bottomControls.style.opacity = '0';
-                centerPlayButton.style.opacity = '0';
-                skipBackwardBtn.style.opacity = '0';
-                skipForwardBtn.style.opacity = '0';
-                videoInfo.style.opacity = '0';
-                settingsContainer.style.opacity = '0';
-            }
-        });
-
-        // Track user interaction
-        bottomControls.addEventListener('mouseenter', () => {
-            isUserInteracting = true;
-            clearTimeout(hideControlsTimeout);
-        });
-
-        bottomControls.addEventListener('mouseleave', () => {
-            isUserInteracting = false;
-            showControls();
-        });
-
-        // ============ SETTINGS MENU CONTROLS ============
-
-        // Toggle settings menu
-        settingsBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            isSettingsOpen = !isSettingsOpen;
-            settingsMenu.classList.toggle('hidden');
-
-            if (isSettingsOpen) {
-                // Close submenus when opening settings
-                speedSubmenu.classList.add('hidden');
-                qualitySubmenu.classList.add('hidden');
-            }
-        });
-
-        // Toggle speed submenu
-        speedMenuBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            speedSubmenu.classList.toggle('hidden');
-            qualitySubmenu.classList.add('hidden');
-        });
-
-        // Toggle quality submenu
-        qualityMenuBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            qualitySubmenu.classList.toggle('hidden');
-            speedSubmenu.classList.add('hidden');
-        });
-
-        // Speed option click handlers
-        speedOptions.forEach(option => {
-            option.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const speed = parseFloat(option.dataset.speed);
-                mainVideo.playbackRate = speed;
-
-                // Update current speed display
-                currentSpeed.textContent = speed === 1 ? '1x' : speed + 'x';
-
-                // Update selected state
-                speedOptions.forEach(opt => opt.classList.remove('bg-white/20'));
-                option.classList.add('bg-white/20');
-
-                // Close menus
-                speedSubmenu.classList.add('hidden');
-                settingsMenu.classList.add('hidden');
-                isSettingsOpen = false;
-            });
-        });
-
-        // Quality option click handlers
-        qualityOptions.forEach(option => {
-            option.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const quality = option.dataset.quality;
-
-                // Update current quality display
-                currentQuality.textContent = quality.charAt(0).toUpperCase() + quality.slice(1);
-
-                // Update selected state
-                qualityOptions.forEach(opt => opt.classList.remove('bg-white/20'));
-                option.classList.add('bg-white/20');
-
-                // Close menus
-                qualitySubmenu.classList.add('hidden');
-                settingsMenu.classList.add('hidden');
-                isSettingsOpen = false;
-
-                // Note: Actual quality switching would require different video sources
-                console.log('Quality changed to:', quality);
-            });
-        });
-
-        // Close settings menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (isSettingsOpen && !settingsContainer.contains(e.target)) {
-                settingsMenu.classList.add('hidden');
-                speedSubmenu.classList.add('hidden');
-                qualitySubmenu.classList.add('hidden');
-                isSettingsOpen = false;
-            }
-        });
-
-        // Track settings menu interaction
-        settingsContainer.addEventListener('mouseenter', () => {
-            isUserInteracting = true;
-            clearTimeout(hideControlsTimeout);
-        });
-
-        settingsContainer.addEventListener('mouseleave', () => {
-            if (!isSettingsOpen) {
-                isUserInteracting = false;
-                showControls();
-            }
-        });
-
-        // Keyboard controls
-        document.addEventListener('keydown', (e) => {
-            if (mainVideoControls.classList.contains('hidden')) return;
-
-            switch(e.key) {
-                case ' ':
-                case 'k':
-                    e.preventDefault();
-                    togglePlayPause();
-                    break;
-                case 'ArrowLeft':
-                    e.preventDefault();
-                    mainVideo.currentTime = Math.max(0, mainVideo.currentTime - 10);
-                    showControls();
-                    break;
-                case 'ArrowRight':
-                    e.preventDefault();
-                    mainVideo.currentTime = Math.min(mainVideo.duration, mainVideo.currentTime + 10);
-                    showControls();
-                    break;
-                case 'ArrowUp':
-                    e.preventDefault();
-                    mainVideo.volume = Math.min(1, mainVideo.volume + 0.1);
-                    volumeSlider.value = mainVideo.volume * 100;
-                    break;
-                case 'ArrowDown':
-                    e.preventDefault();
-                    mainVideo.volume = Math.max(0, mainVideo.volume - 0.1);
-                    volumeSlider.value = mainVideo.volume * 100;
-                    break;
-                case 'f':
-                    e.preventDefault();
-                    fullscreenBtn.click();
-                    break;
-                case 'm':
-                    e.preventDefault();
-                    volumeBtn.click();
-                    break;
-            }
-        });
-
-        // Prevent right-click context menu on videos
-        adVideo.addEventListener('contextmenu', (e) => e.preventDefault());
-        mainVideo.addEventListener('contextmenu', (e) => e.preventDefault());
+        // Example without section (title and description won't show)
+        // const player = new VideoPlayer({
+        //     wrapperId: 'video-player-wrapper',
+        //     mainVideo: {
+        //         url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+        //         title: 'Big Buck Bunny',
+        //         description: 'A large and lovable rabbit deals with three tiny bullies.',
+        //         type: 'video/mp4'
+        //     },
+        //     adVideo: {
+        //         url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+        //         skipAfter: 5,
+        //         type: 'video/mp4'
+        //     },
+        //     thumbnailUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
+        // });
+
+        // Optional: You can control the player programmatically
+        // player.play();
+        // player.pause();
+        // player.setVolume(0.5);
+        // player.seekTo(30);
     </script>
 </body>
 </html>
