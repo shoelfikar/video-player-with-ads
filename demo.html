@@ -67,6 +67,7 @@
                         <li>✓ Pengaturan Kualitas Video</li>
                         <li>✓ Auto-hide Controls</li>
                         <li>✓ Loading Indicators</li>
+                        <li>✓ Custom Color untuk Button Ads & Play</li>
                     </ul>
                 </div>
             </div>
@@ -147,8 +148,66 @@
     thumbnailUrl: 'https://example.com/thumbnail.mp4',
     skipBackwardSeconds: 10,
     skipForwardSeconds: 10,
-    infoText: 'Teks informasi kustom'
+    infoText: 'Teks informasi kustom',
+    // Custom color untuk button ads (opsional)
+    adButtonColor: {
+        background: '#4ade80',      // Hijau
+        backgroundHover: '#22c55e',
+        text: '#000000'
+    },
+    // Custom color untuk play button (opsional)
+    playButtonColor: {
+        background: '#3b82f6',      // Biru
+        backgroundHover: '#2563eb',
+        text: '#ffffff'
+    }
 });</code></pre>
+            </div>
+        </div>
+
+        <!-- Custom Button Colors -->
+        <div class="card rounded-2xl p-8 text-white shadow-2xl mt-8">
+            <h2 class="text-3xl font-bold mb-6">Custom Button Colors</h2>
+            <p class="text-gray-300 mb-6">Kustomisasi warna button untuk play button dan skip button iklan sesuai dengan tema brand Anda.</p>
+
+            <div class="space-y-6">
+                <div class="bg-black/30 rounded-lg p-6">
+                    <h3 class="text-xl font-semibold mb-3 text-yellow-300">Ad Button Color</h3>
+                    <p class="text-gray-300 mb-4">Kustomisasi warna untuk tombol Skip Ad yang muncul saat iklan diputar.</p>
+                    <pre class="bg-black/50 p-4 rounded-lg overflow-x-auto text-sm"><code class="text-green-300">adButtonColor: {
+    background: '#4ade80',        // Warna background
+    backgroundHover: '#22c55e',   // Warna saat hover
+    text: '#000000'               // Warna text
+}</code></pre>
+                    <div class="mt-4 flex items-center space-x-3">
+                        <span class="text-sm text-gray-300">Preview:</span>
+                        <button class="px-6 py-2 rounded-lg font-bold" style="background-color: #4ade80; color: #000000;">Skip Ad →</button>
+                    </div>
+                </div>
+
+                <div class="bg-black/30 rounded-lg p-6">
+                    <h3 class="text-xl font-semibold mb-3 text-yellow-300">Play Button Color</h3>
+                    <p class="text-gray-300 mb-4">Kustomisasi warna untuk tombol Play utama yang muncul di awal.</p>
+                    <pre class="bg-black/50 p-4 rounded-lg overflow-x-auto text-sm"><code class="text-green-300">playButtonColor: {
+    background: '#3b82f6',        // Warna background
+    backgroundHover: '#2563eb',   // Warna saat hover
+    text: '#ffffff'               // Warna text/icon
+}</code></pre>
+                    <div class="mt-4 flex items-center space-x-3">
+                        <span class="text-sm text-gray-300">Preview:</span>
+                        <button class="rounded-full p-3" style="background-color: #3b82f6; color: #ffffff;">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-blue-500/20 border border-blue-500/50 rounded-lg p-4">
+                    <p class="text-sm text-blue-200">
+                        <strong>💡 Tips:</strong> Jika tidak menambahkan konfigurasi custom color, player akan menggunakan warna default (putih untuk skip button dan merah untuk play button).
+                    </p>
+                </div>
             </div>
         </div>
 
@@ -243,7 +302,21 @@
             autoHideControlsDelay: 3000,
 
             // Teks informasi di bawah player
-            infoText: 'Video akan memutar iklan terlebih dahulu. Klik tombol Skip setelah 5 detik atau tunggu hingga iklan selesai.'
+            infoText: 'Video akan memutar iklan terlebih dahulu. Klik tombol Skip setelah 5 detik atau tunggu hingga iklan selesai.',
+
+            // Custom color untuk button ads (skip button)
+            adButtonColor: {
+                background: '#4ade80',      // Hijau (green-400)
+                backgroundHover: '#22c55e', // Hijau gelap (green-500)
+                text: '#000000'             // Hitam
+            },
+
+            // Custom color untuk play button
+            playButtonColor: {
+                background: '#3b82f6',      // Biru (blue-500)
+                backgroundHover: '#2563eb', // Biru gelap (blue-600)
+                text: '#ffffff'             // Putih
+            }
         });
 
         // ============================================
@@ -277,7 +350,21 @@
             skipBackwardSeconds: 15,
             skipForwardSeconds: 15,
 
-            infoText: 'Iklan akan diputar terlebih dahulu. Anda dapat skip setelah 3 detik.'
+            infoText: 'Iklan akan diputar terlebih dahulu. Anda dapat skip setelah 3 detik.',
+
+            // Custom color untuk button ads (skip button) - Orange theme
+            adButtonColor: {
+                background: '#fb923c',      // Orange (orange-400)
+                backgroundHover: '#f97316', // Orange gelap (orange-500)
+                text: '#000000'             // Hitam
+            },
+
+            // Custom color untuk play button - Purple theme
+            playButtonColor: {
+                background: '#a855f7',      // Purple (purple-500)
+                backgroundHover: '#9333ea', // Purple gelap (purple-600)
+                text: '#ffffff'             // Putih
+            }
         });
 
         // ============================================

@@ -3,7 +3,7 @@
  *
  * Usage:
  * const player = new VideoPlayer({
- *   containerId: 'video-player-container',
+ *   wrapperId: 'video-player-wrapper',
  *   mainVideo: {
  *     url: 'https://example.com/video.mp4',
  *     title: 'My Video Title',
@@ -13,7 +13,17 @@
  *     url: 'https://example.com/ad.mp4',
  *     skipAfter: 5
  *   },
- *   thumbnailUrl: 'https://example.com/thumbnail.mp4'
+ *   thumbnailUrl: 'https://example.com/thumbnail.mp4',
+ *   adButtonColor: {
+ *     background: '#ffffff',        // default: white
+ *     backgroundHover: '#e5e7eb',   // default: gray-200
+ *     text: '#000000'               // default: black
+ *   },
+ *   playButtonColor: {
+ *     background: '#dc2626',        // default: red-600
+ *     backgroundHover: '#b91c1c',   // default: red-700
+ *     text: '#ffffff'               // default: white
+ *   }
  * });
  */
 
@@ -43,7 +53,17 @@ class VideoPlayer {
             skipForwardSeconds: config.skipForwardSeconds || 10,
             autoHideControlsDelay: config.autoHideControlsDelay || 3000,
             section: config.section || null, // { title: '...', description: '...' }
-            infoText: config.infoText || 'Video akan memutar iklan terlebih dahulu. Klik tombol Skip setelah beberapa detik atau tunggu hingga iklan selesai.'
+            infoText: config.infoText || 'Video akan memutar iklan terlebih dahulu. Klik tombol Skip setelah beberapa detik atau tunggu hingga iklan selesai.',
+            adButtonColor: {
+                background: config.adButtonColor?.background || '#ffffff',
+                backgroundHover: config.adButtonColor?.backgroundHover || '#e5e7eb',
+                text: config.adButtonColor?.text || '#000000'
+            },
+            playButtonColor: {
+                background: config.playButtonColor?.background || '#dc2626',
+                backgroundHover: config.playButtonColor?.backgroundHover || '#b91c1c',
+                text: config.playButtonColor?.text || '#ffffff'
+            }
         };
 
         // State variables
@@ -369,7 +389,7 @@ class VideoPlayer {
         // Skip backward button
         const skipBackBtn = document.createElement('button');
         skipBackBtn.id = 'skipBackwardBtn';
-        skipBackBtn.className = 'bg-black/60 hover:bg-black/80 text-white rounded-full p-3 transform hover:scale-110 transition-all shadow-2xl pointer-events-auto opacity-0';
+        skipBackBtn.className = 'bg-black/60 hover:bg-black/80 text-white rounded-full w-8 h-8 flex items-center justify-center transform hover:scale-110 transition-all shadow-2xl pointer-events-auto opacity-0';
 
         const skipBackSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         skipBackSvg.setAttribute('class', 'w-8 h-8');
@@ -382,8 +402,8 @@ class VideoPlayer {
 
         const skipBackText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         skipBackText.setAttribute('x', '9');
-        skipBackText.setAttribute('y', '16');
-        skipBackText.setAttribute('font-size', '8');
+        skipBackText.setAttribute('y', '15.5');
+        skipBackText.setAttribute('font-size', '6');
         skipBackText.setAttribute('fill', 'currentColor');
         skipBackText.setAttribute('font-weight', 'bold');
         skipBackText.setAttribute('text-anchor', 'middle');
@@ -396,7 +416,7 @@ class VideoPlayer {
         // Play/Pause button
         const playBtn = document.createElement('button');
         playBtn.id = 'centerPlayButton';
-        playBtn.className = 'bg-black/60 hover:bg-black/80 text-white rounded-full p-4 transform hover:scale-110 transition-all shadow-2xl pointer-events-auto opacity-0';
+        playBtn.className = 'bg-black/60 hover:bg-black/80 text-white rounded-full p-3 transform hover:scale-110 transition-all shadow-2xl pointer-events-auto opacity-0';
 
         const playIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         playIcon.id = 'centerPlayIcon';
@@ -424,7 +444,7 @@ class VideoPlayer {
         // Skip forward button
         const skipForwardBtn = document.createElement('button');
         skipForwardBtn.id = 'skipForwardBtn';
-        skipForwardBtn.className = 'bg-black/60 hover:bg-black/80 text-white rounded-full p-3 transform hover:scale-110 transition-all shadow-2xl pointer-events-auto opacity-0';
+        skipForwardBtn.className = 'bg-black/60 hover:bg-black/80 text-white rounded-full w-8 h-8 flex items-center justify-center transform hover:scale-110 transition-all shadow-2xl pointer-events-auto opacity-0';
 
         const skipForwardSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         skipForwardSvg.setAttribute('class', 'w-8 h-8');
@@ -437,8 +457,8 @@ class VideoPlayer {
 
         const skipForwardText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         skipForwardText.setAttribute('x', '15');
-        skipForwardText.setAttribute('y', '16');
-        skipForwardText.setAttribute('font-size', '8');
+        skipForwardText.setAttribute('y', '15.5');
+        skipForwardText.setAttribute('font-size', '6');
         skipForwardText.setAttribute('fill', 'currentColor');
         skipForwardText.setAttribute('font-weight', 'bold');
         skipForwardText.setAttribute('text-anchor', 'middle');
@@ -614,8 +634,18 @@ class VideoPlayer {
         // Skip button
         const skipButton = document.createElement('button');
         skipButton.id = 'skipButton';
-        skipButton.className = 'absolute bottom-8 right-8 bg-white text-black px-6 py-3 rounded-lg font-bold hover:bg-gray-200 transition-all transform hover:scale-105 opacity-0 pointer-events-none';
+        skipButton.className = 'absolute bottom-8 right-8 px-6 py-3 rounded-lg font-bold transition-all transform hover:scale-105 opacity-0 pointer-events-none';
+        skipButton.style.backgroundColor = this.config.adButtonColor.background;
+        skipButton.style.color = this.config.adButtonColor.text;
         skipButton.textContent = 'Skip Ad →';
+
+        // Add hover effect
+        skipButton.addEventListener('mouseenter', () => {
+            skipButton.style.backgroundColor = this.config.adButtonColor.backgroundHover;
+        });
+        skipButton.addEventListener('mouseleave', () => {
+            skipButton.style.backgroundColor = this.config.adButtonColor.background;
+        });
 
         // Skip countdown
         const skipCountdown = document.createElement('div');
@@ -639,12 +669,22 @@ class VideoPlayer {
 
         const playButton = document.createElement('button');
         playButton.id = 'playButton';
-        playButton.className = 'bg-red-600 hover:bg-red-700 text-white rounded-full p-4 transform hover:scale-110 transition-all shadow-2xl';
+        playButton.className = 'rounded-full p-4 transform hover:scale-110 transition-all shadow-2xl';
+        playButton.style.backgroundColor = this.config.playButtonColor.background;
+        playButton.style.color = this.config.playButtonColor.text;
         playButton.innerHTML = `
             <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M8 5v14l11-7z"/>
             </svg>
         `;
+
+        // Add hover effect
+        playButton.addEventListener('mouseenter', () => {
+            playButton.style.backgroundColor = this.config.playButtonColor.backgroundHover;
+        });
+        playButton.addEventListener('mouseleave', () => {
+            playButton.style.backgroundColor = this.config.playButtonColor.background;
+        });
 
         overlay.appendChild(playButton);
 

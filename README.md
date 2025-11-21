@@ -7,6 +7,7 @@ A dynamically configurable video player with ad support, complete controls, and 
 - ✅ **Dynamic & Reusable** - Can be initialized with different configurations
 - ✅ **Ad Support** - Plays ads before main video with skip button
 - ✅ **Custom Skip Time** - Configure when skip button appears
+- ✅ **Custom Button Colors** - Customize play button and ad skip button colors
 - ✅ **Full Video Controls** - Play/pause, volume, fullscreen, progress bar
 - ✅ **Playback Speed** - Adjust playback speed (0.5x - 2x)
 - ✅ **Quality Settings** - Video quality settings menu
@@ -58,7 +59,7 @@ Add a container with unique ID in your HTML:
     <script>
         // Initialize player
         const player = new VideoPlayer({
-            containerId: 'my-video-player',
+            wrapperId: 'my-video-player',
             mainVideo: {
                 url: 'https://example.com/video.mp4',
                 title: 'Video Title',
@@ -78,7 +79,7 @@ Add a container with unique ID in your HTML:
 
 ```javascript
 const player = new VideoPlayer({
-    containerId: 'my-video-player',
+    wrapperId: 'my-video-player',
     mainVideo: {
         url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
         title: 'Big Buck Bunny',
@@ -102,7 +103,7 @@ const player = new VideoPlayer({
 
 | Property | Type | Default | Description |
 |----------|------|---------|-----------|
-| `containerId` | string | **required** | Container element ID |
+| `wrapperId` | string | **required** | Wrapper element ID |
 | `mainVideo.url` | string | `''` | Main video URL |
 | `mainVideo.title` | string | `'Untitled Video'` | Video title |
 | `mainVideo.description` | string | `'No description available'` | Video description |
@@ -114,7 +115,15 @@ const player = new VideoPlayer({
 | `skipBackwardSeconds` | number | `10` | Seconds to skip backward |
 | `skipForwardSeconds` | number | `10` | Seconds to skip forward |
 | `autoHideControlsDelay` | number | `3000` | Milliseconds before controls hide |
+| `section.title` | string | `null` | Section title (optional) |
+| `section.description` | string | `null` | Section description (optional) |
 | `infoText` | string | `'The video will play...'` | Info text below player |
+| `adButtonColor.background` | string | `'#ffffff'` | Ad skip button background color |
+| `adButtonColor.backgroundHover` | string | `'#e5e7eb'` | Ad skip button hover background color |
+| `adButtonColor.text` | string | `'#000000'` | Ad skip button text color |
+| `playButtonColor.background` | string | `'#dc2626'` | Play button background color |
+| `playButtonColor.backgroundHover` | string | `'#b91c1c'` | Play button hover background color |
+| `playButtonColor.text` | string | `'#ffffff'` | Play button text/icon color |
 
 ## Methods (API)
 
@@ -179,7 +188,7 @@ player.destroy();
 ### Example 1: Minimal Configuration
 ```javascript
 const player = new VideoPlayer({
-    containerId: 'player-1',
+    wrapperId: 'player-1',
     mainVideo: {
         url: 'https://example.com/video.mp4'
     }
@@ -189,7 +198,7 @@ const player = new VideoPlayer({
 ### Example 2: With Ads and Custom Skip Time
 ```javascript
 const player = new VideoPlayer({
-    containerId: 'player-2',
+    wrapperId: 'player-2',
     mainVideo: {
         url: 'https://example.com/main-video.mp4',
         title: 'JavaScript Tutorial',
@@ -206,7 +215,7 @@ const player = new VideoPlayer({
 ```javascript
 // Player 1
 const player1 = new VideoPlayer({
-    containerId: 'player-1',
+    wrapperId: 'player-1',
     mainVideo: {
         url: 'https://example.com/video1.mp4',
         title: 'Video 1'
@@ -215,7 +224,7 @@ const player1 = new VideoPlayer({
 
 // Player 2
 const player2 = new VideoPlayer({
-    containerId: 'player-2',
+    wrapperId: 'player-2',
     mainVideo: {
         url: 'https://example.com/video2.mp4',
         title: 'Video 2'
@@ -223,10 +232,37 @@ const player2 = new VideoPlayer({
 });
 ```
 
-### Example 4: Programmatic Control
+### Example 4: Custom Button Colors
 ```javascript
 const player = new VideoPlayer({
-    containerId: 'my-player',
+    wrapperId: 'my-player',
+    mainVideo: {
+        url: 'https://example.com/video.mp4',
+        title: 'My Video'
+    },
+    adVideo: {
+        url: 'https://example.com/ad.mp4',
+        skipAfter: 5
+    },
+    // Custom colors for ad skip button
+    adButtonColor: {
+        background: '#4ade80',       // Green
+        backgroundHover: '#22c55e',  // Darker green
+        text: '#000000'              // Black
+    },
+    // Custom colors for play button
+    playButtonColor: {
+        background: '#3b82f6',       // Blue
+        backgroundHover: '#2563eb',  // Darker blue
+        text: '#ffffff'              // White
+    }
+});
+```
+
+### Example 5: Programmatic Control
+```javascript
+const player = new VideoPlayer({
+    wrapperId: 'my-player',
     mainVideo: {
         url: 'https://example.com/video.mp4'
     }
@@ -271,7 +307,7 @@ video-player/
 - Ensure video format is supported by browser
 
 ### Player not working
-- Ensure containerId matches the element ID in HTML
+- Ensure wrapperId matches the element ID in HTML
 - Ensure script.js is loaded before initialization
 - Check for errors in browser console
 
@@ -288,6 +324,13 @@ MIT License - Free to use for personal and commercial projects.
 Pull requests are welcome! For major changes, please open an issue first.
 
 ## Changelog
+
+### v1.1.0 (2025-11-21)
+- ✨ Added custom button color configuration
+- 🎨 Support for custom ad skip button colors (background, hover, text)
+- 🎨 Support for custom play button colors (background, hover, text)
+- 🔧 Improved skip button design (compact circle background)
+- 📝 Updated documentation with custom color examples
 
 ### v1.0.0 (2025-10-26)
 - Initial release
